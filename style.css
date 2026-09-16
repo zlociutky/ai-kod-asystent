@@ -26,20 +26,42 @@ body {
 }
 
 .scena {
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-end;
   padding: 24px 16px;
 }
 
-.powitanie {
+.obszar {
+  width: 100%;
   flex: 1;
+  min-height: 0;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
+  overflow-y: auto;
+  transition: justify-content 0.35s ease;
+}
+
+.scena.aktywna .obszar {
+  justify-content: flex-start;
+}
+
+.powitanie {
   text-align: center;
+  overflow: hidden;
+  max-height: 200px;
+  opacity: 1;
+  transition: max-height 0.35s ease, opacity 0.25s ease, margin 0.35s ease;
+}
+
+.scena.aktywna .powitanie {
+  max-height: 0;
+  opacity: 0;
+  margin: 0;
+  pointer-events: none;
 }
 
 .powitanie-tekst {
@@ -50,18 +72,16 @@ body {
   letter-spacing: 0.01em;
 }
 
-.scena.aktywna .powitanie { display: none; }
-.scena.aktywna { justify-content: flex-start; }
-
 .rozmowa {
   width: 100%;
   max-width: 720px;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 20px 0 12px;
-  overflow-y: auto;
+  padding: 4px 0 12px;
 }
+
+.rozmowa:empty { display: none; }
 
 .wiadomosc-uzytkownik {
   align-self: flex-end;
@@ -72,6 +92,13 @@ body {
   max-width: 80%;
   font-size: 14.5px;
   line-height: 1.5;
+  opacity: 0;
+  transform: translateY(8px);
+  animation: wjazd 0.3s ease forwards;
+}
+
+@keyframes wjazd {
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .blok-kodu {
