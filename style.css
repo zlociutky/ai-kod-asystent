@@ -155,20 +155,29 @@ body {
 .chip-jezyk:hover { border-color: var(--fiolet); }
 .chip-jezyk svg { color: var(--tekst-przygaszony); }
 
+.jezyk-kontener {
+  position: relative;
+  flex-shrink: 0;
+}
+
 .jezyk-menu {
   background: var(--panel-jasny);
   border: 1px solid var(--obwodka);
   border-radius: 12px;
   padding: 6px;
-  display: flex;
+  display: none;
   flex-direction: column;
   gap: 2px;
   min-width: 160px;
   margin: 0;
-  inset: auto auto 60px auto;
-  position: fixed;
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 0;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  z-index: 20;
 }
+
+.jezyk-menu.otwarte { display: flex; }
 
 .jezyk-menu button {
   background: transparent;
