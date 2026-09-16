@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asystent Kodu</title>
+<link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="pasek">
+    <div class="pasek-znaczniki">
+      <span class="kropka czerwona"></span>
+      <span class="kropka zolta"></span>
+      <span class="kropka zielona"></span>
+    </div>
+    <h1>asystent<span class="akcent">_kodu</span></h1>
+  </header>
+
+  <main class="uklad">
+    <section class="panel-wejscie">
+      <label for="jezyk">Język</label>
+      <select id="jezyk">
+        <option value="cpp">C++</option>
+        <option value="python">Python</option>
+        <option value="javascript">JavaScript</option>
+        <option value="html">HTML</option>
+        <option value="css">CSS</option>
+      </select>
+
+      <label for="prompt">Co mam napisać?</label>
+      <textarea id="prompt" placeholder="np. funkcja sortująca tablicę przez szybkie sortowanie..."></textarea>
+
+      <button id="generuj">Generuj kod</button>
+      <p id="status" class="status"></p>
+    </section>
+
+    <section class="panel-wyjscie">
+      <div class="wynik-naglowek">
+        <span id="etykieta-jezyka">kod</span>
+        <button id="kopiuj">Kopiuj</button>
+      </div>
+      <pre><code id="wynik-kod">// wygenerowany kod pojawi się tutaj</code></pre>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

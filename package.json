@@ -1,0 +1,16 @@
+{
+  "name": "ai-kod-asystent-backend",
+  "version": "1.0.0",
+  "description": "Backend asystenta AI do kodowania (C++, Python, JS, HTML, CSS) z darmowym API Gemini",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "dotenv": "^16.4.5"
+  }
+}
