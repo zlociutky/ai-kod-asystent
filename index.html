@@ -19,17 +19,19 @@
 
     <div class="dok-wejscie">
       <div class="pasek-wejscia">
-        <button id="jezyk-przycisk" class="chip-jezyk" popovertarget="jezyk-menu">
-          <span id="jezyk-etykieta">C++</span>
-          <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-        </button>
+        <div class="jezyk-kontener">
+          <button id="jezyk-przycisk" class="chip-jezyk">
+            <span id="jezyk-etykieta">C++</span>
+            <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
 
-        <div id="jezyk-menu" popover class="jezyk-menu">
-          <button data-jezyk="cpp" data-etykieta="C++">C++</button>
-          <button data-jezyk="python" data-etykieta="Python">Python</button>
-          <button data-jezyk="javascript" data-etykieta="JavaScript">JavaScript</button>
-          <button data-jezyk="html" data-etykieta="HTML">HTML</button>
-          <button data-jezyk="css" data-etykieta="CSS">CSS</button>
+          <div id="jezyk-menu" class="jezyk-menu">
+            <button data-jezyk="cpp" data-etykieta="C++">C++</button>
+            <button data-jezyk="python" data-etykieta="Python">Python</button>
+            <button data-jezyk="javascript" data-etykieta="JavaScript">JavaScript</button>
+            <button data-jezyk="html" data-etykieta="HTML">HTML</button>
+            <button data-jezyk="css" data-etykieta="CSS">CSS</button>
+          </div>
         </div>
 
         <textarea id="prompt" rows="1" placeholder="Zapytaj o kod..."></textarea>
