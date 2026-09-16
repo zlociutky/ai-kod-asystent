@@ -9,7 +9,7 @@ require("dotenv").config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const GEMINI_MODEL = "gemini-3.0-flash"; // szybki, darmowy model — dobry do kodu
+const GEMINI_MODEL = "gemini-3.8-flash"; // szybki, darmowy model — dobry do kodu
 
 app.use(express.json({ limit: "1mb" }));
 app.use(express.static(__dirname));
