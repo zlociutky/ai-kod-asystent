@@ -11,12 +11,23 @@ const jezykMenu = document.getElementById("jezyk-menu");
 let aktualnyJezyk = "cpp";
 
 // Wybór języka z menu
+jezykPrzycisk.addEventListener("click", (e) => {
+  e.stopPropagation();
+  jezykMenu.classList.toggle("otwarte");
+});
+
 jezykMenu.addEventListener("click", (e) => {
   const przycisk = e.target.closest("button[data-jezyk]");
   if (!przycisk) return;
   aktualnyJezyk = przycisk.dataset.jezyk;
   jezykEtykieta.textContent = przycisk.dataset.etykieta;
-  jezykMenu.hidePopover();
+  jezykMenu.classList.remove("otwarte");
+});
+
+document.addEventListener("click", (e) => {
+  if (!jezykMenu.contains(e.target) && e.target !== jezykPrzycisk) {
+    jezykMenu.classList.remove("otwarte");
+  }
 });
 
 // Auto-rozszerzanie pola tekstowego
