@@ -9,41 +9,39 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-  <header class="pasek">
-    <div class="pasek-znaczniki">
-      <span class="kropka czerwona"></span>
-      <span class="kropka zolta"></span>
-      <span class="kropka zielona"></span>
+  <div class="scena">
+
+    <div id="powitanie" class="powitanie">
+      <p class="powitanie-tekst">Gotowy, żeby napisać dla Ciebie kod.</p>
     </div>
-    <h1>asystent<span class="akcent">_kodu</span></h1>
-  </header>
 
-  <main class="uklad">
-    <section class="panel-wejscie">
-      <label for="jezyk">Język</label>
-      <select id="jezyk">
-        <option value="cpp">C++</option>
-        <option value="python">Python</option>
-        <option value="javascript">JavaScript</option>
-        <option value="html">HTML</option>
-        <option value="css">CSS</option>
-      </select>
+    <div id="rozmowa" class="rozmowa"></div>
 
-      <label for="prompt">Co mam napisać?</label>
-      <textarea id="prompt" placeholder="np. funkcja sortująca tablicę przez szybkie sortowanie..."></textarea>
+    <div class="dok-wejscie">
+      <div class="pasek-wejscia">
+        <button id="jezyk-przycisk" class="chip-jezyk" popovertarget="jezyk-menu">
+          <span id="jezyk-etykieta">C++</span>
+          <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
 
-      <button id="generuj">Generuj kod</button>
-      <p id="status" class="status"></p>
-    </section>
+        <div id="jezyk-menu" popover class="jezyk-menu">
+          <button data-jezyk="cpp" data-etykieta="C++">C++</button>
+          <button data-jezyk="python" data-etykieta="Python">Python</button>
+          <button data-jezyk="javascript" data-etykieta="JavaScript">JavaScript</button>
+          <button data-jezyk="html" data-etykieta="HTML">HTML</button>
+          <button data-jezyk="css" data-etykieta="CSS">CSS</button>
+        </div>
 
-    <section class="panel-wyjscie">
-      <div class="wynik-naglowek">
-        <span id="etykieta-jezyka">kod</span>
-        <button id="kopiuj">Kopiuj</button>
+        <textarea id="prompt" rows="1" placeholder="Zapytaj o kod..."></textarea>
+
+        <button id="generuj" class="przycisk-wyslij" aria-label="Wyślij">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 19V5M12 5L5 12M12 5L19 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
       </div>
-      <pre><code id="wynik-kod">// wygenerowany kod pojawi się tutaj</code></pre>
-    </section>
-  </main>
+      <p id="status" class="status"></p>
+    </div>
+
+  </div>
 
   <script src="script.js"></script>
 </body>
