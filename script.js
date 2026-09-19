@@ -63,7 +63,10 @@ loginSubmit.addEventListener("click", async () => {
 });
 
 loginGoogle.addEventListener("click", async () => {
-  await supabaseClient.auth.signInWithOAuth({ provider: "google" });
+  await supabaseClient.auth.signInWithOAuth({
+    provider: "google",
+    options: { redirectTo: window.location.origin },
+  });
 });
 
 przyciskWyloguj.addEventListener("click", async () => {
