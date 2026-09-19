@@ -6,49 +6,97 @@
 <title>zlociutky.ai</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="stylesheet" href="style.css">
-<script src="supabase-config.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 </head>
 <body>
-  <div class="scena">
 
-    <div class="obszar">
-      <div id="powitanie" class="powitanie">
-        <p class="powitanie-tekst">Gotowy, żeby napisać dla Ciebie kod.</p>
+  <!-- EKRAN LOGOWANIA -->
+  <div id="ekran-logowania" class="ekran-logowania">
+    <div class="karta-logowania">
+      <h1 class="logo-tekst">asystent<span class="akcent">_kodu</span></h1>
+
+      <div class="zakladki-logowania">
+        <button id="tab-logowanie" class="zakladka aktywna" type="button">Logowanie</button>
+        <button id="tab-rejestracja" class="zakladka" type="button">Rejestracja</button>
       </div>
 
-      <div id="rozmowa" class="rozmowa"></div>
+      <input id="login-email" type="email" placeholder="Adres e-mail" autocomplete="email">
+      <input id="login-haslo" type="password" placeholder="Hasło" autocomplete="current-password">
+
+      <button id="login-submit" class="przycisk-glowny" type="button">Zaloguj się</button>
+
+      <div class="rozdzielacz"><span>lub</span></div>
+
+      <button id="login-google" class="przycisk-google" type="button">
+        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84c-.21 1.13-.84 2.09-1.8 2.73v2.27h2.92c1.7-1.57 2.68-3.88 2.68-6.64z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.92-2.27c-.81.54-1.84.86-3.04.86-2.34 0-4.32-1.58-5.03-3.71H.96v2.34C2.44 15.98 5.48 18 9 18z"/><path fill="#FBBC05" d="M3.97 10.7c-.18-.54-.28-1.11-.28-1.7s.1-1.16.28-1.7V4.96H.96C.35 6.17 0 7.55 0 9s.35 2.83.96 4.04l3.01-2.34z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.51.45 3.44 1.35l2.59-2.59C13.46.89 11.43 0 9 0 5.48 0 2.44 2.02.96 4.96l3.01 2.34C4.68 5.16 6.66 3.58 9 3.58z"/></svg>
+        Kontynuuj przez Google
+      </button>
+
+      <p id="login-status" class="login-status"></p>
     </div>
-
-    <div class="dok-wejscie">
-      <div class="pasek-wejscia">
-        <div class="jezyk-kontener">
-          <button id="jezyk-przycisk" class="chip-jezyk">
-            <span id="jezyk-etykieta">C++</span>
-            <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-          </button>
-
-          <div id="jezyk-menu" class="jezyk-menu">
-            <button data-jezyk="cpp" data-etykieta="C++">C++</button>
-            <button data-jezyk="python" data-etykieta="Python">Python</button>
-            <button data-jezyk="javascript" data-etykieta="JavaScript">JavaScript</button>
-            <button data-jezyk="html" data-etykieta="HTML">HTML</button>
-            <button data-jezyk="css" data-etykieta="CSS">CSS</button>
-          </div>
-        </div>
-
-        <textarea id="prompt" rows="1" placeholder="Zapytaj o kod..."></textarea>
-
-        <button id="generuj" class="przycisk-wyslij" aria-label="Wyślij">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 19V5M12 5L5 12M12 5L19 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-      </div>
-      <p id="status" class="status"></p>
-    </div>
-
   </div>
 
+  <!-- APLIKACJA -->
+  <div id="aplikacja" class="aplikacja ukryta">
+
+    <header class="gorny-pasek">
+      <span id="uzytkownik-email" class="uzytkownik-email"></span>
+      <div class="gorny-przyciski">
+        <button id="przycisk-historia" class="przycisk-mini" type="button">Historia</button>
+        <button id="przycisk-wyloguj" class="przycisk-mini" type="button">Wyloguj</button>
+      </div>
+    </header>
+
+    <div id="panel-historii" class="panel-historii ukryta">
+      <div class="panel-historii-naglowek">
+        <span>Twoja historia</span>
+        <button id="zamknij-historie" class="przycisk-mini" type="button">Zamknij</button>
+      </div>
+      <div id="lista-historii" class="lista-historii"></div>
+    </div>
+
+    <div class="scena">
+
+      <div class="obszar">
+        <div id="powitanie" class="powitanie">
+          <p class="powitanie-tekst">Gotowy, żeby napisać dla Ciebie kod.</p>
+        </div>
+
+        <div id="rozmowa" class="rozmowa"></div>
+      </div>
+
+      <div class="dok-wejscie">
+        <div class="pasek-wejscia">
+          <div class="jezyk-kontener">
+            <button id="jezyk-przycisk" class="chip-jezyk">
+              <span id="jezyk-etykieta">C++</span>
+              <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </button>
+
+            <div id="jezyk-menu" class="jezyk-menu">
+              <button data-jezyk="cpp" data-etykieta="C++">C++</button>
+              <button data-jezyk="python" data-etykieta="Python">Python</button>
+              <button data-jezyk="javascript" data-etykieta="JavaScript">JavaScript</button>
+              <button data-jezyk="html" data-etykieta="HTML">HTML</button>
+              <button data-jezyk="css" data-etykieta="CSS">CSS</button>
+            </div>
+          </div>
+
+          <textarea id="prompt" rows="1" placeholder="Zapytaj o kod..."></textarea>
+
+          <button id="generuj" class="przycisk-wyslij" aria-label="Wyślij">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 19V5M12 5L5 12M12 5L19 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+        <p id="status" class="status"></p>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="supabase-config.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
