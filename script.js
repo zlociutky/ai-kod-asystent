@@ -2,7 +2,6 @@
 
 const ekranLogowania = document.getElementById("ekran-logowania");
 const aplikacja = document.getElementById("aplikacja");
-const uzytkownikEmail = document.getElementById("uzytkownik-email");
 
 const tabLogowanie = document.getElementById("tab-logowanie");
 const tabRejestracja = document.getElementById("tab-rejestracja");
@@ -13,10 +12,18 @@ const loginGoogle = document.getElementById("login-google");
 const loginStatus = document.getElementById("login-status");
 
 const przyciskWyloguj = document.getElementById("przycisk-wyloguj");
-const przyciskHistoria = document.getElementById("przycisk-historia");
-const zamknijHistorie = document.getElementById("zamknij-historie");
-const panelHistorii = document.getElementById("panel-historii");
-const listaHistorii = document.getElementById("lista-historii");
+const nowyCzatBtn = document.getElementById("nowy-czat");
+const szukajCzatow = document.getElementById("szukaj-czatow");
+const listaPrzypiete = document.getElementById("lista-przypiete");
+const listaOstatnie = document.getElementById("lista-ostatnie");
+const sekcjaPrzypiete = document.getElementById("sekcja-przypiete");
+
+const kontoPrzycisk = document.getElementById("konto-przycisk");
+const kontoMenu = document.getElementById("konto-menu");
+const kontoNazwa = document.getElementById("konto-nazwa");
+const kontoMenuNazwa = document.getElementById("konto-menu-nazwa");
+const kontoMenuEmail = document.getElementById("konto-menu-email");
+const avatarInicjaly = document.getElementById("avatar-inicjaly");
 
 let trybRejestracji = false;
 
@@ -85,59 +92,118 @@ supabaseClient.auth.onAuthStateChange((_zdarzenie, sesja) => {
   if (sesja) {
     ekranLogowania.style.display = "none";
     aplikacja.classList.remove("ukryta");
-    uzytkownikEmail.textContent = sesja.user.email;
+    wypelnijKonto(sesja.user);
+    zaladujCzaty();
   } else {
     ekranLogowania.style.display = "flex";
     aplikacja.classList.add("ukryta");
-    panelHistorii.classList.add("ukryta");
   }
 });
 
-// ===== HISTORIA =====
+function wypelnijKonto(user) {
+  const nazwa = user.user_metadata?.full_name || user.user_metadata?.name || user.email.split("@")[0];
+  const avatarUrl = user.user_metadata?.avatar_url || user.user_metadata?.picture;
 
-przyciskHistoria.addEventListener("click", async () => {
-  panelHistorii.classList.remove("ukryta");
-  await zaladujHistorie();
+  kontoNazwa.textContent = nazwa;
+  kontoMenuNazwa.textContent = nazwa;
+  kontoMenuEmail.textContent = user.email;
+
+  if (avatarUrl) {
+    avatarInicjaly.innerHTML = `<img src="${avatarUrl}" alt="">`;
+  } else {
+    avatarInicjaly.textContent = user.email.charAt(0).toUpperCase();
+  }
+}
+
+kontoPrzycisk.addEventListener("click", (e) => {
+  e.stopPropagation();
+  kontoMenu.classList.toggle("ukryta");
 });
 
-zamknijHistorie.addEventListener("click", () => {
-  panelHistorii.classList.add("ukryta");
+document.addEventListener("click", (e) => {
+  if (!kontoMenu.contains(e.target) && e.target !== kontoPrzycisk) {
+    kontoMenu.classList.add("ukryta");
+  }
 });
 
-async function zaladujHistorie() {
-  listaHistorii.innerHTML = "<p class='pusta-historia'>Wczytuję...</p>";
+// ===== PASEK BOCZNY: CZATY =====
 
+let wszystkieCzaty = [];
+
+nowyCzatBtn.addEventListener("click", () => {
+  rozmowa.innerHTML = "";
+  scena.classList.remove("aktywna");
+  promptPole.value = "";
+  promptPole.focus();
+});
+
+szukajCzatow.addEventListener("input", () => {
+  renderujListyCzatow(szukajCzatow.value.trim().toLowerCase());
+});
+
+async function zaladujCzaty() {
   const { data, error } = await supabaseClient
     .from("historia")
     .select("*")
     .order("utworzono", { ascending: false })
-    .limit(50);
+    .limit(100);
 
-  if (error) {
-    listaHistorii.innerHTML = "<p class='pusta-historia'>Nie udało się wczytać historii.</p>";
-    return;
-  }
+  if (error || !data) return;
 
-  if (!data || data.length === 0) {
-    listaHistorii.innerHTML = "<p class='pusta-historia'>Brak zapytań — Twoja historia pojawi się tutaj.</p>";
-    return;
-  }
+  wszystkieCzaty = data;
+  renderujListyCzatow("");
+}
 
-  listaHistorii.innerHTML = "";
-  data.forEach((wpis) => {
-    const el = document.createElement("button");
-    el.className = "wpis-historii";
-    el.innerHTML = `<span class="wpis-historii-jezyk">${wpis.jezyk}</span><span class="wpis-historii-tresc">${escapujHtml(wpis.prompt)}</span>`;
-    el.addEventListener("click", () => {
-      scena.classList.add("aktywna");
-      dodajWiadomoscUzytkownika(wpis.prompt);
-      const kodElement = dodajBlokKodu(wpis.jezyk);
-      kodElement.textContent = wpis.wynik;
-      panelHistorii.classList.add("ukryta");
-      rozmowa.scrollTop = rozmowa.scrollHeight;
-    });
-    listaHistorii.appendChild(el);
+function renderujListyCzatow(filtr) {
+  const przefiltrowane = filtr
+    ? wszystkieCzaty.filter((c) => c.prompt.toLowerCase().includes(filtr))
+    : wszystkieCzaty;
+
+  const przypiete = przefiltrowane.filter((c) => c.przypiety);
+  const ostatnie = przefiltrowane.filter((c) => !c.przypiety);
+
+  sekcjaPrzypiete.style.display = przypiete.length ? "block" : "none";
+
+  listaPrzypiete.innerHTML = "";
+  przypiete.forEach((wpis) => listaPrzypiete.appendChild(zbudujWpisCzatu(wpis)));
+
+  listaOstatnie.innerHTML = "";
+  ostatnie.forEach((wpis) => listaOstatnie.appendChild(zbudujWpisCzatu(wpis)));
+}
+
+function zbudujWpisCzatu(wpis) {
+  const el = document.createElement("div");
+  el.className = "wpis-czatu";
+
+  const tytul = document.createElement("span");
+  tytul.className = "wpis-czatu-tytul";
+  tytul.textContent = wpis.prompt;
+
+  const pinBtn = document.createElement("button");
+  pinBtn.type = "button";
+  pinBtn.className = "wpis-czatu-pin" + (wpis.przypiety ? " aktywny" : "");
+  pinBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="${wpis.przypiety ? "currentColor" : "none"}"><path d="M12 2L14.5 8.5L21 9.5L16 14.5L17.5 21L12 17.5L6.5 21L8 14.5L3 9.5L9.5 8.5L12 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>`;
+
+  pinBtn.addEventListener("click", async (e) => {
+    e.stopPropagation();
+    const nowyStan = !wpis.przypiety;
+    await supabaseClient.from("historia").update({ przypiety: nowyStan }).eq("id", wpis.id);
+    wpis.przypiety = nowyStan;
+    renderujListyCzatow(szukajCzatow.value.trim().toLowerCase());
   });
+
+  el.addEventListener("click", () => {
+    rozmowa.innerHTML = "";
+    scena.classList.add("aktywna");
+    dodajWiadomoscUzytkownika(wpis.prompt);
+    const kodElement = dodajBlokKodu(wpis.jezyk);
+    kodElement.textContent = wpis.wynik;
+    rozmowa.scrollTop = rozmowa.scrollHeight;
+  });
+
+  el.appendChild(tytul);
+  el.appendChild(pinBtn);
+  return el;
 }
 
 async function zapiszWHistorii(jezyk, prompt, wynik) {
@@ -145,18 +211,16 @@ async function zapiszWHistorii(jezyk, prompt, wynik) {
   const userId = sesjaDane?.session?.user?.id;
   if (!userId) return;
 
-  await supabaseClient.from("historia").insert({
-    user_id: userId,
-    jezyk,
-    prompt,
-    wynik,
-  });
-}
+  const { data } = await supabaseClient
+    .from("historia")
+    .insert({ user_id: userId, jezyk, prompt, wynik })
+    .select()
+    .single();
 
-function escapujHtml(tekst) {
-  const div = document.createElement("div");
-  div.textContent = tekst;
-  return div.innerHTML;
+  if (data) {
+    wszystkieCzaty.unshift(data);
+    renderujListyCzatow(szukajCzatow.value.trim().toLowerCase());
+  }
 }
 
 // ===== ASYSTENT KODU =====
