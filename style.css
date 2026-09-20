@@ -617,6 +617,23 @@ textarea#prompt::placeholder { color: var(--tekst-przygaszony); }
   margin-left: var(--sidebar-zwiniety);
   height: 100vh;
   overflow: hidden;
+  position: relative;
+}
+
+.matrix-tlo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1s ease;
+}
+
+.scena {
+  position: relative;
+  z-index: 1;
 }
 
 /* ===== TRYB PROGRAMISTY / ZWYKŁY ===== */
