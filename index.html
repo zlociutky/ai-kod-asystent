@@ -44,7 +44,7 @@
     <aside id="sidebar" class="sidebar">
 
       <div class="sidebar-logo">
-      <img src="favicon.svg" alt="" class="sidebar-logo-znak">
+        <img src="favicon.svg" alt="" class="sidebar-logo-znak">
       </div>
 
       <nav class="sidebar-menu">
@@ -69,6 +69,13 @@
         <div id="lista-ostatnie" class="sidebar-lista"></div>
       </div>
 
+      <div class="sidebar-tryb">
+        <button id="tryb-przelacznik" class="sidebar-item" type="button">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h10M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <span id="tryb-etykieta" class="sidebar-etykieta">Tryb Programisty</span>
+        </button>
+      </div>
+
       <div class="sidebar-konto">
         <button id="konto-przycisk" class="sidebar-item" type="button">
           <span id="avatar-inicjaly" class="avatar-kolko">?</span>
@@ -89,7 +96,7 @@
 
         <div class="obszar">
           <div id="powitanie" class="powitanie">
-            <p class="powitanie-tekst">Gotowy, żeby napisać dla Ciebie kod.</p>
+            <p id="powitanie-tekst" class="powitanie-tekst">Co dziś wyczarujemy?</p>
           </div>
 
           <div id="rozmowa" class="rozmowa"></div>
@@ -97,7 +104,7 @@
 
         <div class="dok-wejscie">
           <div class="pasek-wejscia">
-            <div class="jezyk-kontener">
+            <div id="jezyk-kontener" class="jezyk-kontener">
               <button id="jezyk-przycisk" class="chip-jezyk">
                 <span id="jezyk-etykieta">C++</span>
                 <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
@@ -112,7 +119,7 @@
               </div>
             </div>
 
-            <textarea id="prompt" rows="1" placeholder="Zapytaj o kod..."></textarea>
+            <textarea id="prompt" rows="1" placeholder="Zapytaj o cokolwiek..."></textarea>
 
             <button id="generuj" class="przycisk-wyslij" aria-label="Wyślij">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 19V5M12 5L5 12M12 5L19 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
