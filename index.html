@@ -41,58 +41,87 @@
   <!-- APLIKACJA -->
   <div id="aplikacja" class="aplikacja ukryta">
 
-    <header class="gorny-pasek">
-      <span id="uzytkownik-email" class="uzytkownik-email"></span>
-      <div class="gorny-przyciski">
-        <button id="przycisk-historia" class="przycisk-mini" type="button">Historia</button>
-        <button id="przycisk-wyloguj" class="przycisk-mini" type="button">Wyloguj</button>
+    <aside id="sidebar" class="sidebar">
+
+      <div class="sidebar-logo">
+        <span class="sidebar-logo-znak">◈</span>
       </div>
-    </header>
 
-    <div id="panel-historii" class="panel-historii ukryta">
-      <div class="panel-historii-naglowek">
-        <span>Twoja historia</span>
-        <button id="zamknij-historie" class="przycisk-mini" type="button">Zamknij</button>
-      </div>
-      <div id="lista-historii" class="lista-historii"></div>
-    </div>
+      <nav class="sidebar-menu">
+        <button id="nowy-czat" class="sidebar-item" type="button">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <span class="sidebar-etykieta">Nowy czat</span>
+        </button>
 
-    <div class="scena">
-
-      <div class="obszar">
-        <div id="powitanie" class="powitanie">
-          <p class="powitanie-tekst">Gotowy, żeby napisać dla Ciebie kod.</p>
+        <div class="sidebar-item sidebar-search">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <input id="szukaj-czatow" type="text" placeholder="Szukaj czatów" class="sidebar-etykieta sidebar-search-input">
         </div>
+      </nav>
 
-        <div id="rozmowa" class="rozmowa"></div>
+      <div class="sidebar-sekcja" id="sekcja-przypiete">
+        <p class="sidebar-sekcja-tytul sidebar-etykieta">Przypięte</p>
+        <div id="lista-przypiete" class="sidebar-lista"></div>
       </div>
 
-      <div class="dok-wejscie">
-        <div class="pasek-wejscia">
-          <div class="jezyk-kontener">
-            <button id="jezyk-przycisk" class="chip-jezyk">
-              <span id="jezyk-etykieta">C++</span>
-              <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-            </button>
+      <div class="sidebar-sekcja sidebar-sekcja-rozciagnij">
+        <p class="sidebar-sekcja-tytul sidebar-etykieta">Ostatnie</p>
+        <div id="lista-ostatnie" class="sidebar-lista"></div>
+      </div>
 
-            <div id="jezyk-menu" class="jezyk-menu">
-              <button data-jezyk="cpp" data-etykieta="C++">C++</button>
-              <button data-jezyk="python" data-etykieta="Python">Python</button>
-              <button data-jezyk="javascript" data-etykieta="JavaScript">JavaScript</button>
-              <button data-jezyk="html" data-etykieta="HTML">HTML</button>
-              <button data-jezyk="css" data-etykieta="CSS">CSS</button>
-            </div>
+      <div class="sidebar-konto">
+        <button id="konto-przycisk" class="sidebar-item" type="button">
+          <span id="avatar-inicjaly" class="avatar-kolko">?</span>
+          <span id="konto-nazwa" class="sidebar-etykieta"></span>
+        </button>
+
+        <div id="konto-menu" class="konto-menu ukryta">
+          <p id="konto-menu-nazwa" class="konto-menu-nazwa"></p>
+          <p id="konto-menu-email" class="konto-menu-email"></p>
+          <button id="przycisk-wyloguj" class="konto-menu-wyloguj" type="button">Wyloguj</button>
+        </div>
+      </div>
+
+    </aside>
+
+    <div class="glowna-tresc">
+      <div class="scena">
+
+        <div class="obszar">
+          <div id="powitanie" class="powitanie">
+            <p class="powitanie-tekst">Gotowy, żeby napisać dla Ciebie kod.</p>
           </div>
 
-          <textarea id="prompt" rows="1" placeholder="Zapytaj o kod..."></textarea>
-
-          <button id="generuj" class="przycisk-wyslij" aria-label="Wyślij">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 19V5M12 5L5 12M12 5L19 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
+          <div id="rozmowa" class="rozmowa"></div>
         </div>
-        <p id="status" class="status"></p>
-      </div>
 
+        <div class="dok-wejscie">
+          <div class="pasek-wejscia">
+            <div class="jezyk-kontener">
+              <button id="jezyk-przycisk" class="chip-jezyk">
+                <span id="jezyk-etykieta">C++</span>
+                <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </button>
+
+              <div id="jezyk-menu" class="jezyk-menu">
+                <button data-jezyk="cpp" data-etykieta="C++">C++</button>
+                <button data-jezyk="python" data-etykieta="Python">Python</button>
+                <button data-jezyk="javascript" data-etykieta="JavaScript">JavaScript</button>
+                <button data-jezyk="html" data-etykieta="HTML">HTML</button>
+                <button data-jezyk="css" data-etykieta="CSS">CSS</button>
+              </div>
+            </div>
+
+            <textarea id="prompt" rows="1" placeholder="Zapytaj o kod..."></textarea>
+
+            <button id="generuj" class="przycisk-wyslij" aria-label="Wyślij">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 19V5M12 5L5 12M12 5L19 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+          <p id="status" class="status"></p>
+        </div>
+
+      </div>
     </div>
   </div>
 
