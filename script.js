@@ -244,7 +244,71 @@ trybPrzelacznik.addEventListener("click", () => {
   trybEtykieta.textContent = trybProgramisty ? "Tryb zwykły" : "Tryb Programisty";
   promptPole.placeholder = trybProgramisty ? "Zapytaj o kod..." : "Zapytaj o cokolwiek...";
   powitanieTekst.textContent = trybProgramisty ? "Gotowy, żeby napisać dla Ciebie kod." : "Co dziś wyczarujemy?";
+
+  if (trybProgramisty) {
+    odtworzEfektMatrix();
+  }
 });
+
+// ===== EFEKT MATRIXOWY (tło przy przełączeniu na tryb programisty) =====
+
+function odtworzEfektMatrix() {
+  const canvas = document.getElementById("matrix-tlo");
+  const kontener = canvas.parentElement;
+  const ctx = canvas.getContext("2d");
+
+  const szerokosc = kontener.clientWidth;
+  const wysokosc = kontener.clientHeight;
+  canvas.width = szerokosc;
+  canvas.height = wysokosc;
+
+  const rozmiarCzcionki = 16;
+  const kolumny = Math.floor(szerokosc / rozmiarCzcionki);
+  const znaki = "01{}[]<>/;=+-*ABCDEF".split("");
+  const pozycjeY = new Array(kolumny).fill(0).map(() => Math.random() * -wysokosc);
+
+  canvas.style.opacity = "0.4";
+
+  let dziala = true;
+  let idKlatki;
+
+  function rysuj() {
+    if (!dziala) return;
+
+    ctx.fillStyle = "rgba(11, 10, 16, 0.15)";
+    ctx.fillRect(0, 0, szerokosc, wysokosc);
+
+    ctx.font = rozmiarCzcionki + "px 'IBM Plex Mono', monospace";
+
+    for (let i = 0; i < kolumny; i++) {
+      const znak = znaki[Math.floor(Math.random() * znaki.length)];
+      const x = i * rozmiarCzcionki;
+      const y = pozycjeY[i];
+
+      ctx.fillStyle = "rgba(184, 148, 255, 0.55)";
+      ctx.fillText(znak, x, y);
+
+      pozycjeY[i] += rozmiarCzcionki * 0.6;
+      if (pozycjeY[i] > wysokosc && Math.random() > 0.98) {
+        pozycjeY[i] = Math.random() * -100;
+      }
+    }
+
+    idKlatki = requestAnimationFrame(rysuj);
+  }
+
+  rysuj();
+
+  setTimeout(() => {
+    canvas.style.opacity = "0";
+  }, 2200);
+
+  setTimeout(() => {
+    dziala = false;
+    cancelAnimationFrame(idKlatki);
+    ctx.clearRect(0, 0, szerokosc, wysokosc);
+  }, 3200);
+}
 
 // ===== ASYSTENT KODU =====
 
