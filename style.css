@@ -386,104 +386,234 @@ textarea#prompt::placeholder { color: var(--tekst-przygaszony); }
   margin: 0;
 }
 
-/* ===== APLIKACJA / PASEK GÓRNY ===== */
+/* ===== PASEK BOCZNY ===== */
 
 .aplikacja.ukryta { display: none; }
+.aplikacja { display: flex; height: 100vh; }
 
-.gorny-pasek {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 20px;
-  border-bottom: 1px solid var(--obwodka);
+:root {
+  --sidebar-zwiniety: 64px;
+  --sidebar-rozwiniety: 272px;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: var(--sidebar-zwiniety);
   background: var(--panel);
+  border-right: 1px solid var(--obwodka);
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: width 0.18s ease;
 }
 
-.uzytkownik-email {
-  font-size: 12.5px;
+.sidebar:hover {
+  width: var(--sidebar-rozwiniety);
+}
+
+.sidebar-etykieta {
+  opacity: 0;
+  white-space: nowrap;
+  transition: opacity 0.12s ease;
+}
+.sidebar:hover .sidebar-etykieta { opacity: 1; }
+
+.sidebar-logo {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  flex-shrink: 0;
+}
+.sidebar-logo-znak {
+  font-size: 20px;
+  color: var(--fiolet-jasny);
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 8px;
+  background: transparent;
+  border: none;
   color: var(--tekst-przygaszony);
-  font-family: "IBM Plex Mono", monospace;
+  cursor: pointer;
+  width: 100%;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 13.5px;
+}
+.sidebar-item:hover { background: var(--panel-jasny); color: var(--tekst); }
+.sidebar-item svg { flex-shrink: 0; }
+
+.sidebar-search { cursor: default; }
+.sidebar-search:hover { background: transparent; }
+.sidebar-search-input {
+  background: transparent;
+  border: none;
+  color: var(--tekst);
+  font-size: 13.5px;
+  font-family: "IBM Plex Sans", sans-serif;
+  width: 100%;
+  padding: 0;
+}
+.sidebar-search-input:focus { outline: none; }
+.sidebar-search-input::placeholder { color: var(--tekst-przygaszony); }
+
+.sidebar-sekcja {
+  padding: 10px 12px 4px;
+  min-height: 0;
+  overflow: hidden;
+}
+.sidebar-sekcja-rozciagnij {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.sidebar-sekcja-rozciagnij .sidebar-lista {
+  flex: 1;
+  overflow-y: auto;
 }
 
-.gorny-przyciski { display: flex; gap: 8px; }
+.sidebar-sekcja-tytul {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--tekst-przygaszony);
+  margin: 0 0 4px 8px;
+}
 
-.przycisk-mini {
+.sidebar-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.sidebar-lista:empty { display: none; }
+
+.wpis-czatu {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  height: 34px;
+  padding: 0 8px;
+  border-radius: 7px;
+  background: transparent;
+  border: none;
+  color: var(--tekst);
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  font-size: 13px;
+  font-family: "IBM Plex Sans", sans-serif;
+}
+.wpis-czatu:hover { background: var(--panel-jasny); }
+
+.wpis-czatu-tytul {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.12s ease;
+}
+.sidebar:hover .wpis-czatu-tytul { opacity: 1; }
+
+.wpis-czatu-pin {
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  color: var(--tekst-przygaszony);
+  cursor: pointer;
+  padding: 4px;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.12s ease;
+}
+.sidebar:hover .wpis-czatu-pin { display: block; }
+.wpis-czatu:hover .wpis-czatu-pin { opacity: 1; }
+.wpis-czatu-pin.aktywny { opacity: 1; color: var(--fiolet-jasny); display: block; }
+.wpis-czatu-pin:hover { color: var(--fiolet-jasny); }
+
+.sidebar-konto {
+  position: relative;
+  padding: 8px;
+  border-top: 1px solid var(--obwodka);
+  flex-shrink: 0;
+}
+
+.avatar-kolko {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--fiolet);
+  color: #10081f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11.5px;
+  font-weight: 600;
+  overflow: hidden;
+}
+.avatar-kolko img { width: 100%; height: 100%; object-fit: cover; }
+
+.konto-menu {
+  position: absolute;
+  bottom: 100%;
+  left: 8px;
+  margin-bottom: 8px;
+  width: 240px;
+  background: var(--panel-jasny);
+  border: 1px solid var(--obwodka);
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  z-index: 50;
+}
+.konto-menu.ukryta { display: none; }
+
+.konto-menu-nazwa {
+  font-size: 13.5px;
+  color: var(--tekst);
+  margin: 0 0 2px;
+  font-weight: 600;
+}
+.konto-menu-email {
+  font-size: 12px;
+  color: var(--tekst-przygaszony);
+  margin: 0 0 12px;
+  word-break: break-all;
+}
+.konto-menu-wyloguj {
+  width: 100%;
   background: transparent;
   border: 1px solid var(--obwodka);
-  color: var(--tekst-przygaszony);
-  padding: 6px 12px;
+  color: var(--blad);
+  padding: 8px;
   border-radius: 7px;
-  font-size: 12.5px;
+  font-size: 13px;
   cursor: pointer;
   font-family: "IBM Plex Sans", sans-serif;
 }
-.przycisk-mini:hover { border-color: var(--fiolet); color: var(--fiolet-jasny); }
+.konto-menu-wyloguj:hover { background: rgba(240, 128, 107, 0.1); }
 
-/* ===== PANEL HISTORII ===== */
-
-.panel-historii {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 320px;
-  background: var(--panel);
-  border-left: 1px solid var(--obwodka);
-  z-index: 30;
-  display: flex;
-  flex-direction: column;
-}
-.panel-historii.ukryta { display: none; }
-
-.panel-historii-naglowek {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 16px;
-  border-bottom: 1px solid var(--obwodka);
-  font-size: 13px;
-  color: var(--tekst-przygaszony);
-}
-
-.lista-historii {
+.glowna-tresc {
   flex: 1;
-  overflow-y: auto;
-  padding: 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.wpis-historii {
-  background: var(--panel-jasny);
-  border: 1px solid var(--obwodka);
-  border-radius: 10px;
-  padding: 10px 12px;
-  cursor: pointer;
-  text-align: left;
-}
-.wpis-historii:hover { border-color: var(--fiolet); }
-
-.wpis-historii-jezyk {
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 11px;
-  color: var(--fiolet-jasny);
-  display: block;
-  margin-bottom: 4px;
-}
-
-.wpis-historii-tresc {
-  font-size: 12.5px;
-  color: var(--tekst);
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  margin-left: var(--sidebar-zwiniety);
+  height: 100vh;
   overflow: hidden;
-}
-
-.pusta-historia {
-  color: var(--tekst-przygaszony);
-  font-size: 13px;
-  padding: 16px;
-  text-align: center;
 }
