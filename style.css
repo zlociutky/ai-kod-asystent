@@ -618,3 +618,27 @@ textarea#prompt::placeholder { color: var(--tekst-przygaszony); }
   height: 100vh;
   overflow: hidden;
 }
+
+/* ===== TRYB PROGRAMISTY / ZWYKŁY ===== */
+
+.sidebar-tryb {
+  padding: 8px 8px 0;
+  flex-shrink: 0;
+}
+
+/* Domyślnie (tryb zwykły): ukryj wybór języka */
+#jezyk-kontener { display: none; }
+.aplikacja.tryb-dev #jezyk-kontener { display: block; }
+
+.wiadomosc-asystenta {
+  align-self: flex-start;
+  max-width: 85%;
+  color: var(--tekst);
+  font-size: 14.5px;
+  line-height: 1.65;
+  white-space: pre-wrap;
+  padding: 2px 2px;
+  opacity: 0;
+  transform: translateY(8px);
+  animation: wjazd 0.3s ease forwards;
+}
