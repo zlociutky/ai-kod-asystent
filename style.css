@@ -430,8 +430,9 @@ textarea#prompt::placeholder { color: var(--tekst-przygaszony); }
   flex-shrink: 0;
 }
 .sidebar-logo-znak {
-  font-size: 20px;
-  color: var(--fiolet-jasny);
+  width: 26px;
+  height: 26px;
+  display: block;
 }
 
 .sidebar-menu {
