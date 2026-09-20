@@ -38,6 +38,7 @@ const PROMPTY = {
   javascript: "Jesteś ekspertem JavaScript (nowoczesny ES2022+). Pisz czysty, czytelny kod. Krótko skomentuj kluczowe fragmenty.",
   html: "Jesteś ekspertem HTML. Pisz semantyczny, poprawny kod HTML5. Krótko skomentuj kluczowe fragmenty.",
   css: "Jesteś ekspertem CSS. Pisz nowoczesny, czysty CSS (flexbox/grid, zmienne CSS gdy pasuje). Krótko skomentuj kluczowe fragmenty.",
+  ogolny: "Jesteś pomocnym asystentem AI specjalizującym się w programowaniu, ale odpowiadasz naturalnie jak w zwykłej rozmowie. Pisz zwykłym tekstem, a fragmenty kodu wstawiaj tylko gdy faktycznie pomagają w odpowiedzi.",
 };
 
 app.post("/api/generate", async (req, res) => {
