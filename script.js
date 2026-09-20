@@ -195,9 +195,16 @@ function zbudujWpisCzatu(wpis) {
   el.addEventListener("click", () => {
     rozmowa.innerHTML = "";
     scena.classList.add("aktywna");
+
+    const czyKod = wpis.jezyk !== "ogolny";
+    trybProgramisty = czyKod;
+    aplikacja.classList.toggle("tryb-dev", czyKod);
+    trybEtykieta.textContent = czyKod ? "Tryb zwykły" : "Tryb Programisty";
+    promptPole.placeholder = czyKod ? "Zapytaj o kod..." : "Zapytaj o cokolwiek...";
+
     dodajWiadomoscUzytkownika(wpis.prompt);
-    const kodElement = dodajBlokKodu(wpis.jezyk);
-    kodElement.textContent = wpis.wynik;
+    const element = czyKod ? dodajBlokKodu(wpis.jezyk) : dodajOdpowiedzZwykla();
+    element.textContent = wpis.wynik;
     rozmowa.scrollTop = rozmowa.scrollHeight;
   });
 
@@ -222,6 +229,22 @@ async function zapiszWHistorii(jezyk, prompt, wynik) {
     renderujListyCzatow(szukajCzatow.value.trim().toLowerCase());
   }
 }
+
+// ===== TRYB PROGRAMISTY / ZWYKŁY =====
+
+const trybPrzelacznik = document.getElementById("tryb-przelacznik");
+const trybEtykieta = document.getElementById("tryb-etykieta");
+const powitanieTekst = document.getElementById("powitanie-tekst");
+
+let trybProgramisty = false;
+
+trybPrzelacznik.addEventListener("click", () => {
+  trybProgramisty = !trybProgramisty;
+  aplikacja.classList.toggle("tryb-dev", trybProgramisty);
+  trybEtykieta.textContent = trybProgramisty ? "Tryb zwykły" : "Tryb Programisty";
+  promptPole.placeholder = trybProgramisty ? "Zapytaj o kod..." : "Zapytaj o cokolwiek...";
+  powitanieTekst.textContent = trybProgramisty ? "Gotowy, żeby napisać dla Ciebie kod." : "Co dziś wyczarujemy?";
+});
 
 // ===== ASYSTENT KODU =====
 
@@ -309,6 +332,13 @@ function dodajBlokKodu(jezykEtykietaTekst) {
   return kodElement;
 }
 
+function dodajOdpowiedzZwykla() {
+  const div = document.createElement("div");
+  div.className = "wiadomosc-asystenta";
+  rozmowa.appendChild(div);
+  return div;
+}
+
 async function generuj() {
   const prompt = promptPole.value.trim();
   if (!prompt) {
@@ -318,8 +348,17 @@ async function generuj() {
 
   scena.classList.add("aktywna");
   dodajWiadomoscUzytkownika(prompt);
-  const kodElement = dodajBlokKodu(jezykEtykieta.textContent);
-  kodElement.textContent = "";
+
+  const jezykDoWyslania = trybProgramisty ? aktualnyJezyk : "ogolny";
+  const etykietaDoWyslania = trybProgramisty ? jezykEtykieta.textContent : "ogolny";
+
+  let elementOdpowiedzi;
+  if (trybProgramisty) {
+    elementOdpowiedzi = dodajBlokKodu(etykietaDoWyslania);
+  } else {
+    elementOdpowiedzi = dodajOdpowiedzZwykla();
+  }
+  elementOdpowiedzi.textContent = "";
 
   promptPole.value = "";
   promptPole.style.height = "auto";
@@ -331,23 +370,23 @@ async function generuj() {
     const odpowiedz = await fetch("/api/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt, jezyk: aktualnyJezyk }),
+      body: JSON.stringify({ prompt, jezyk: jezykDoWyslania }),
     });
 
     const dane = await odpowiedz.json();
 
     if (!odpowiedz.ok) {
       ustawStatus(dane.error || "Coś poszło nie tak.", true);
-      kodElement.textContent = "// błąd generowania";
+      elementOdpowiedzi.textContent = trybProgramisty ? "// błąd generowania" : "Coś poszło nie tak.";
       return;
     }
 
-    kodElement.textContent = dane.wynik;
+    elementOdpowiedzi.textContent = dane.wynik;
     ustawStatus("Gotowe.");
-    zapiszWHistorii(jezykEtykieta.textContent, prompt, dane.wynik);
+    zapiszWHistorii(etykietaDoWyslania, prompt, dane.wynik);
   } catch (err) {
     ustawStatus("Nie udało się połączyć z serwerem.", true);
-    kodElement.textContent = "// błąd połączenia";
+    elementOdpowiedzi.textContent = trybProgramisty ? "// błąd połączenia" : "Nie udało się połączyć z serwerem.";
   } finally {
     przyciskWyslij.disabled = false;
     rozmowa.scrollTop = rozmowa.scrollHeight;
